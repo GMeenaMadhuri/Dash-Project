@@ -4,6 +4,7 @@ Installation
 I recommend installing pandas, since you will most likely use them.
 
 $ pip3 install pandas
+
 Then, just install Dash. Plotly comes with Dash
 
 $ pip3 install dash
