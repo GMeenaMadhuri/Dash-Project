@@ -9,19 +9,19 @@ app = dash.Dash(__name__)
 
 # ------------------------------------------------------------------------------
 # Import and clean data (importing csv into pandas)
-df = pd.read_csv("/Users/sreenivas/PycharmProjects/covid-19.csv")
+df = pd.read_csv("covid-19.csv")
 print(df[:5])
 
 # ------------------------------------------------------------------------------
 # App layout
 app.layout = html.Div([
 
-    html.H1("COVID-19 analysis for some of the states in USA using Dash framework ", style={'text-align': 'center'}),
+    html.H1("COVID-19 analysis for some of the states in USA using Dash framework", style={'text-align': 'center'}),
 
     dcc.Dropdown(id="slct_state",
                  options=[
                      {"label": "Alabama", "value": 'Alabama'},
-                     {"label": "Alaska", "value": 'South Carolina'},
+                     {"label": "Alaska", "value": 'Alaska'},
                      {"label": "Arizona", "value": 'Arizona'},
                      {"label": "Arkansas", "value": 'Arkansas'},
                      {"label": "California", "value": 'California'},
@@ -35,11 +35,10 @@ app.layout = html.Div([
                      {"label": "Texas", "value": 'Texas'},
                      {"label": "Virginia", "value": 'Virginia'}
                  ],
-                 multi=False,
-                 value="Arkansas",
+                 multi=True,
+                 value=['Arkansas','Texas'],
                  style={'width': "40%"}
                  ),
-
     html.Div(id='output_container', children=[]),
     html.Br(),
     dcc.Graph(id='my_covid_map', figure={})
@@ -58,9 +57,20 @@ def update_graph(option_slctd):
     print(type(option_slctd))
     container = "The State chosen by user was: {}".format(option_slctd)
     dff = df.copy()
-    dff = dff[dff["Province_State"] == option_slctd]
+    dff = dff[(dff['Province_State'].isin(option_slctd))]
+ # Plotly Express
+    fig = px.choropleth(
+        data_frame=dff,
+        locationmode='USA-states',
+        locations='State_code',
+        scope="usa",
+        color='Confirmed',
+        hover_data=['Province_State', 'Confirmed' , 'Recovered' , 'Deaths'],
+        color_continuous_scale=px.colors.sequential.YlOrRd,
+        labels={'No of Confirmed cases': 'Confirmed'},
+        template='plotly_dark'
+    )
     return container, fig
-
 
 # ------------------------------------------------------------------------------
 if __name__ == '__main__':
