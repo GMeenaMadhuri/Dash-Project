@@ -15,9 +15,7 @@ print(df[:5])
 # ------------------------------------------------------------------------------
 # App layout
 app.layout = html.Div([
-
     html.H1("COVID-19 analysis for some of the states in USA using Dash framework", style={'text-align': 'center'}),
-
     dcc.Dropdown(id="slct_state",
                  options=[
                      {"label": "Alabama", "value": 'Alabama'},
@@ -42,7 +40,6 @@ app.layout = html.Div([
     html.Div(id='output_container', children=[]),
     html.Br(),
     dcc.Graph(id='my_covid_map', figure={})
-
 ])
 
 # ------------------------------------------------------------------------------
